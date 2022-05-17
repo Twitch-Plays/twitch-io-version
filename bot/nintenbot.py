@@ -74,13 +74,15 @@ class Playbot(commands.Bot):
             if any([word in ctx.message.content for word in self.blacklist]):
                 self.timeout(ctx = commands.Context, user = ctx.author.name,  duration = 300, reason ='You said a bad word')
 
+    @commands.command()
+    async def addblacklist(self, ctx : commands.context, message):
+        self.blacklist.append(message)
+        await ctx.send(f'{message} has been added to blacklist there are {len(self.blacklist)} words banned from chat')
 
     @commands.command()
-    async def timeout(self, ctx: commands.Context, user : dataclasses.User, duration : int = 300, *, reason : str = ''):
-
+    async def timeout(self, ctx: commands.Context, user : ctx.author, duration : int = 300, *, reason : str = ''):
         await ctx.channel.timeout(user, duration, reason)
     
 
-
-bot = Playbot() 
+bot = Playbot()
 bot.run()
