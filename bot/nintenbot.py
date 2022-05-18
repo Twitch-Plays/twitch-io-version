@@ -14,11 +14,17 @@ class Playbot(commands.Bot):
         super().__init__(
             token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["seattcpybot"]
         )
+    def blacklist_check(self):
+        with open("./blacklist.txt") as f:
+            blacklist_file = f.read()
+            for word in blacklist_file:
+                if word not in self.blacklist:
+                    self.blacklist.append(word)
 
     async def event_ready(self):
-        '''
-        Verifies the login of bot
-        '''
+
+        #Verifies the login of bot
+
         print(f"Logged in as | {self.nick}")
         print(f"User id is | {self.user_id}")
 
@@ -74,10 +80,18 @@ class Playbot(commands.Bot):
             if any([word in ctx.message.content for word in self.blacklist]):
                 self.timeout(ctx = commands.Context, user = ctx.author.name,  duration = 300, reason ='You said a bad word')
 
+    #add words to blacklist
     @commands.command()
-    async def addblacklist(self, ctx : commands.context, message):
+    async def add_blacklist(self, ctx : commands.context, message):
         self.blacklist.append(message)
         await ctx.send(f'{message} has been added to blacklist there are {len(self.blacklist)} words banned from chat')
+
+        for message in ctx.message.content:
+            if message not in blacklist:
+                with open("./blacklist.txt", "w") as f:
+                    for message in blacklist:
+                        f.write(message)
+                        f.write('\n')
 
     @commands.command()
     async def timeout(self, ctx: commands.Context, user : ctx.author, duration : int = 300, *, reason : str = ''):
