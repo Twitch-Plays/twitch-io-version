@@ -80,8 +80,8 @@ class Playbot(commands.Bot):
         await ctx.send(f'{message} has been added to blacklist there are {len(self.blacklist)} words banned from chat')
 
     @commands.command()
-    async def timeout(self, ctx: commands.Context, user : ctx.author, duration : int = 300, *, reason : str = ''):
-        await ctx.channel.timeout(user, duration, reason)
+    async def timeout(self, ctx: commands.Context, user, duration : int = 300, *, reason : str = ''):
+        await ctx.send(f'/timeout {user} {duration} {reason}')
     
 
 bot = Playbot()
