@@ -1,5 +1,6 @@
 import os
 from twitchio.ext import commands
+from twitchio import chatter
 from dotenv import load_dotenv
 import keyboard
 
@@ -26,27 +27,32 @@ class Bot(commands.Bot):
     # Check chat for blacklisted words
     
     async def event_message(self, message):
+        if message.echo:
+            return
         try:
-            print(f'{message.author}: {message.content}')
-            if message.echo:
-                return
-            await self.handle_commands(message)
+            print(f'{message.tags}: {message.author}: {message.content}')
+            print(chatter.badges)
+            await self.check_message(message)
         finally:
-            if not message.author.is_broadcaster or message.author.is_moderator:
-                self.check_message(message)
+            await self.handle_commands(message)
+        
 
 
     async def check_message(self, message):
+        print(f'original message: {message.content}')
         if self.explicitfilter is False:
             print('filter is off')
             return message
         if self.explicitfilter is True:
             print('checking message')
-            if not message.author.is_broadcaster or message.author.is_moderator:
+            if not message.author['is_broadcaster'] or message.author.is_moderator:
                 for word in message.content:
+                    word = word.lower()
                     if word in self.blacklist:
-                        self.timeout(
-                            user=message.author, duration=300, reason="You said a bad word"
+                        message_id = message.tags['id']
+                        await message.channel.send(f'/delete {message_id}')
+                        await self.timeout(
+                            user=message.tags['display-name'], duration=30, reason="You said a bad word"
                             )
                     else:
                         return
@@ -93,7 +99,7 @@ class Bot(commands.Bot):
 
     @commands.command(name="banword")
     async def add_to_blacklist(self, ctx: commands.Context):
-        blkmsg = ctx.message.content.replace("!blacklist", "")
+        blkmsg = ctx.message.content.replace("!banword ", "").lower()
         await ctx.send(f"Attempting to add {blkmsg} to blacklist")
         if blkmsg in self.blacklist:
             await ctx.send(f"{blkmsg} is already in the blacklist")
@@ -104,7 +110,7 @@ class Bot(commands.Bot):
     async def timeout(self, user, duration: int = 300, *, reason: str = ""):
         ctx = commands.Context
         await ctx.send('someone said a bad word')
-        await ctx.send(f"/timeout {user} {duration} {reason}")
+        
 
 
 bot = Bot()
