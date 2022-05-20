@@ -7,16 +7,16 @@ import pyautogui
 
 load_dotenv()
 
+
 class Bot(commands.Bot):
     def __init__(self):
         self.twitchplayactive = False
         self.explicitfilter = False
         self.blacklist = []
         super().__init__(
-            token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["tibimoth"]
+            token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["rsw359"]
         )
 
-    
     async def event_ready(self):
         """
         Verifies the login of bot
@@ -31,6 +31,7 @@ class Bot(commands.Bot):
     if value == message.tags[key]
     return boolean true/false
     '''
+
     async def event_message(self, message: twitchio.Message):
         if message.echo:
             return
@@ -49,14 +50,14 @@ class Bot(commands.Bot):
                 await message.channel.send(f"/timeout {message.author.name} 30 You Said a Bad Word")
                 print(f"/timeout {message.tags['display-name']} 30 You Said a Bad Word")
 
-#Start Twitch Plays Commands
+    # Start Twitch Plays Commands
 
     @commands.command()
     async def up(self, ctx: commands.Context):
         pyautogui.press("up")
 
     @commands.command()
-    async def down(self,ctx: commands.Context):
+    async def down(self, ctx: commands.Context):
         pyautogui.press("down")
 
     @commands.command()
@@ -70,43 +71,54 @@ class Bot(commands.Bot):
     @commands.command()
     async def w(self, ctx: commands.Context):
         pyautogui.press("w")
+
     @commands.command()
     async def s(self, ctx: commands.Context):
         pyautogui.press("s")
+
     @commands.command()
     async def d(self, ctx: commands.Context):
-        pyautogui.press("return")
+        pyautogui.press("d")
+
     @commands.command()
     async def a(self, ctx: commands.Context):
         pyautogui.press("a")
+
     @commands.command(name="b")
     async def push_b(self, ctx: commands.Context):
         pyautogui.press("b")
+
     @commands.command()
     async def start(self, ctx: commands.Context):
         pyautogui.press("return")
+
     @commands.command()
     async def enter(self, ctx: commands.Context):
         pyautogui.press("return")
+
     @commands.command(name='1')
     async def one(self, ctx: commands.Context):
-        pyautogui.press("return")
+        pyautogui.press("1")
+
     @commands.command(name='2')
     async def two(self, ctx: commands.Context):
-        pyautogui.press("return")
+        pyautogui.press("2")
+
     @commands.command(name='3')
     async def three(self, ctx: commands.Context):
         pyautogui.press("3")
+
     @commands.command(name='4')
     async def four(self, ctx: commands.Context):
         pyautogui.press("4")
+
     @commands.command(name='5')
     async def five(self, ctx: commands.Context):
         pyautogui.press("5")
+
     @commands.command(name='tab')
     async def tab(self, ctx: commands.Context):
         pyautogui.press("tab")
-
 
     # Explicit Chat Filter ON/Off
     @commands.command(name="filter")
@@ -130,8 +142,6 @@ class Bot(commands.Bot):
             return
         self.blacklist.append(blkmsg)
         await ctx.send(f"{blkmsg} has been added to the blacklist")
-
-
 
 
 bot = Bot()
