@@ -3,7 +3,7 @@ import time
 import twitchio
 from twitchio.ext import commands
 from dotenv import load_dotenv
-import keyboard
+import pyautogui
 
 load_dotenv()
 
@@ -50,6 +50,8 @@ class Bot(commands.Bot):
                 await message.channel.send(f"/timeout {message.author.name} 30 You Said a Bad Word")
                 print(f"/timeout {message.tags['display-name']} 30 You Said a Bad Word")
 
+#Start Twitch Plays Commands
+
     @commands.command()
     async def up(self, ctx: commands.Context):
         keyboard.press_and_release("up")
@@ -60,23 +62,23 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def left(self, ctx: commands.Context):
-        keyboard.press_and_release("left")
+        pyautogui.press("left")
 
     @commands.command()
     async def right(self, ctx: commands.Context):
-        keyboard.press_and_release("right")
+        pyautogui.press("right")
 
     @commands.command(name="a")
     async def push_a(self, ctx: commands.Context):
-        keyboard.press_and_release("s")
+        pyautogui.press("s")
 
     @commands.command(name="b")
     async def push_b(self, ctx: commands.Context):
-        keyboard.press_and_release("a")
+        pyautogui.press("a")
 
     @commands.command()
     async def start(self, ctx: commands.Context):
-        keyboard.press_and_release("return")
+        pyautogui.press("return")
 
     # Explicit Chat Filter ON/Off
     @commands.command(name="filter")
