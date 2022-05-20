@@ -14,7 +14,7 @@ class Bot(commands.Bot):
         self.explicitfilter = False
         self.blacklist = []
         super().__init__(
-            token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["rsw359"]
+            token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["bkhanal4351"]
         )
 
     async def event_ready(self):
@@ -119,6 +119,16 @@ class Bot(commands.Bot):
     @commands.command(name='tab')
     async def tab(self, ctx: commands.Context):
         pyautogui.press("tab")
+
+    @commands.command()
+    async def hello(self, ctx: commands.Context):
+        await ctx.send(f'Hello {ctx.author.name}!')
+
+    @commands.command()
+    async def controls(self, ctx: commands.Context):
+        # shouts out the controls
+        await ctx.send(f'Hello {ctx.author.name}! controls for the game are: !up, !down, !left, !right, !w, !s, !a, !d, !b, !tab, !enter, !1, !2, !3, !4, !5 and !start')
+
 
     # Explicit Chat Filter ON/Off
     @commands.command(name="filter")
