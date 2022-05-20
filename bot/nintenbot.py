@@ -54,11 +54,11 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def up(self, ctx: commands.Context):
-        keyboard.press_and_release("up")
+        pyautogui.press("up")
 
     @commands.command()
     async def down(self,ctx: commands.Context):
-        keyboard.press_and_release("down")
+        pyautogui.press("down")
 
     @commands.command()
     async def left(self, ctx: commands.Context):
