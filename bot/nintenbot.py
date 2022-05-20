@@ -1,6 +1,7 @@
 import os
+import time
+import twitchio
 from twitchio.ext import commands
-from twitchio import chatter
 from dotenv import load_dotenv
 import keyboard
 
@@ -13,7 +14,7 @@ class Bot(commands.Bot):
         self.explicitfilter = False
         self.blacklist = []
         super().__init__(
-            token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["seattcpybot"]
+            token=os.getenv("ACCESSTOKEN"), prefix="!", initial_channels=["tibimoth"]
         )
 
     
@@ -25,37 +26,29 @@ class Bot(commands.Bot):
         print(f"User id is | {self.user_id}")
 
     # Check chat for blacklisted words
-    
-    async def event_message(self, message):
+    # Check if mod
+    '''
+    key,value = 'mod', '1'
+    if value == message.tags[key]
+    return boolean true/false
+    '''
+    async def event_message(self, message: twitchio.Message):
         if message.echo:
             return
         try:
-            print(f'{message.tags}: {message.author}: {message.content}')
-            print(chatter.badges)
-            await self.check_message(message)
+            return await self.profanity_check(message)
         finally:
             await self.handle_commands(message)
-        
 
-
-    async def check_message(self, message):
-        print(f'original message: {message.content}')
-        if self.explicitfilter is False:
-            print('filter is off')
-            return message
-        if self.explicitfilter is True:
-            print('checking message')
-            if not message.author['is_broadcaster'] or message.author.is_moderator:
-                for word in message.content:
-                    word = word.lower()
-                    if word in self.blacklist:
-                        message_id = message.tags['id']
-                        await message.channel.send(f'/delete {message_id}')
-                        await self.timeout(
-                            user=message.tags['display-name'], duration=30, reason="You said a bad word"
-                            )
-                    else:
-                        return
+    async def profanity_check(self, message: twitchio.Message):
+        if not self.explicitfilter:
+            return
+        if message.author.is_mod or message.author.is_broadcaster:
+            return
+        for word in message.content.lower().split(' '):
+            if word in self.blacklist:
+                await message.channel.send(f"/timeout {message.author.name} 30 You Said a Bad Word")
+                print(f"/timeout {message.tags['display-name']} 30 You Said a Bad Word")
 
     @commands.command()
     async def up(self, ctx: commands.Context):
@@ -101,16 +94,14 @@ class Bot(commands.Bot):
     async def add_to_blacklist(self, ctx: commands.Context):
         blkmsg = ctx.message.content.replace("!banword ", "").lower()
         await ctx.send(f"Attempting to add {blkmsg} to blacklist")
+        time.sleep(2)
         if blkmsg in self.blacklist:
             await ctx.send(f"{blkmsg} is already in the blacklist")
             return
         self.blacklist.append(blkmsg)
         await ctx.send(f"{blkmsg} has been added to the blacklist")
 
-    async def timeout(self, user, duration: int = 300, *, reason: str = ""):
-        ctx = commands.Context
-        await ctx.send('someone said a bad word')
-        
+
 
 
 bot = Bot()
