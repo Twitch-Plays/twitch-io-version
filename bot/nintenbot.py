@@ -7,7 +7,6 @@ import pyautogui
 
 load_dotenv()
 
-
 class Bot(commands.Bot):
     def __init__(self):
         self.twitchplayactive = False
@@ -68,17 +67,46 @@ class Bot(commands.Bot):
     async def right(self, ctx: commands.Context):
         pyautogui.press("right")
 
-    @commands.command(name="a")
-    async def push_a(self, ctx: commands.Context):
+    @commands.command()
+    async def w(self, ctx: commands.Context):
+        pyautogui.press("w")
+    @commands.command()
+    async def s(self, ctx: commands.Context):
         pyautogui.press("s")
-
+    @commands.command()
+    async def d(self, ctx: commands.Context):
+        pyautogui.press("return")
+    @commands.command()
+    async def a(self, ctx: commands.Context):
+        pyautogui.press("a")
     @commands.command(name="b")
     async def push_b(self, ctx: commands.Context):
-        pyautogui.press("a")
-
+        pyautogui.press("b")
     @commands.command()
     async def start(self, ctx: commands.Context):
         pyautogui.press("return")
+    @commands.command()
+    async def enter(self, ctx: commands.Context):
+        pyautogui.press("return")
+    @commands.command(name='1')
+    async def one(self, ctx: commands.Context):
+        pyautogui.press("return")
+    @commands.command(name='2')
+    async def two(self, ctx: commands.Context):
+        pyautogui.press("return")
+    @commands.command(name='3')
+    async def three(self, ctx: commands.Context):
+        pyautogui.press("3")
+    @commands.command(name='4')
+    async def four(self, ctx: commands.Context):
+        pyautogui.press("4")
+    @commands.command(name='5')
+    async def five(self, ctx: commands.Context):
+        pyautogui.press("5")
+    @commands.command(name='tab')
+    async def tab(self, ctx: commands.Context):
+        pyautogui.press("tab")
+
 
     # Explicit Chat Filter ON/Off
     @commands.command(name="filter")
